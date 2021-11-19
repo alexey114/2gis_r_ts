@@ -12,11 +12,12 @@ export const App = () => {
         id="map"
         ref ={(node) => {
           if (node) {
+
               map = DG.map('map', {
-                'center': [54.98, 82.89],
+                'center': [55.76239378474318, 37.85664198038579],
                 'zoom': 13,
-                
             });
+
           };
         }}>
       </div>
