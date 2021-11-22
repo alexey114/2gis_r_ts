@@ -5,7 +5,6 @@ export const App = () => {
 
   const DG = require('2gis-maps'); 
   let map:any;
-  let marker:any;
 
   return (
     <>
