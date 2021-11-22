@@ -2,3 +2,9 @@
     width: 100vw;
     height: 100vh;
 }
+
+#marker{
+    position: absolute;
+    top: 0;
+    left: 45vw;
+}
