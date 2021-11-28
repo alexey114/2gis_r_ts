@@ -1,42 +1,25 @@
-import React from 'react';
-import './App.css';
+import Map from './Map';
+import Marker from './Marker';
 
 export const App = () => {
-
-  const DG = require('2gis-maps'); 
-  let map:any;
-
-  return (
-    <>
-      <div
-        id="map"
-        ref ={(node) => {
-          if (node) {
-
-                map = DG.map('map', {
-                'center': [55.76239378474318, 37.85664198038579],
-                'zoom': 13,
-            });
-            
-            
-
-          };
-        }}>
-      </div>
-      <div
-        id="marker"
-        ref ={(node) => {
-
-          if (node) {
-
-            DG.marker([55.76239378474318, 37.85664198038579]).addTo(map).bindPopup('Реутов - наукоград!');
-
-          };
-
-        }}>
-          <p>Стартовая точка в Реутово!</p>
-
-      </div>
-    </>
-  );
+    return (
+        <Map center={[55.76239378474318, 37.85664198038579]} zoom={13}>
+            {/* <div
+                id="marker"
+                ref={(node) => {
+                    if (node) {
+                        DG.marker([55.76239378474318, 37.85664198038579]).addTo(map).bindPopup('Реутов - наукоград!');
+                    };
+                }}>
+                <p>Стартовая точка в Реутово!</p>
+            </div> */}
+            <div>
+                <p>Стартовая точка в Реутово!</p>
+            </div>{/*
+                пример дочернего элемента, который никак не будет отображаться (потому, что мы сами 
+                    контролируем, что будет отображаться в этом нашем компоненте)
+            */}
+            <Marker coords={[55.76239378474318, 37.85664198038579]} />
+        </Map>
+    );
 };
