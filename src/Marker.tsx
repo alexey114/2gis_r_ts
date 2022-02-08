@@ -1,5 +1,9 @@
-import React from 'react';
+export interface IMarker {
+    coords: [number, number]
+}
 
-export const Marker = () => {
-
+const Marker = (props: IMarker) => {
+    return null; // заглушка
 };
+
+export default Marker;
