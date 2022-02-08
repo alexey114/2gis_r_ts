@@ -18,9 +18,9 @@ interface ICoordinate {
     y: number
 }
 
-function Map(props: IMap) {
+let map: any; // DG.map result
 
-    let map: any; // DG.map result
+function Map(props: IMap) {
 
     let coordinateLine: JSX.Element[] = []                                   //Массив с координатами обычных линий для отрисовки
     let coordinatePolygon: string = ""                                         //Строка с координатами полигона
@@ -146,7 +146,7 @@ function Map(props: IMap) {
     //РИСОВАНИЕ КРУЖКОВ
 
     function createFiguresKnot(element: ICoordinate, index: number) {
-        return <circle key={index} onMouseDown={(e) => { downCircle(index, e) }} onClick={circleSelection} cx={element.x} cy={element.y} style={{ zIndex: 1 }} r="20" fill="blue" stroke={colorСircuit} />
+        return <circle key={index} onMouseDown={(e) => { downCircle(index, e) }} onClick={circleSelection} cx={element.x} cy={element.y} style={{ zIndex: 1 }} r="10" fill="blue" stroke={colorСircuit} />
     }
     let paintFiguresKnot = coordinateToArray.map(createFiguresKnot)
 
@@ -171,7 +171,7 @@ function Map(props: IMap) {
 
     function changeColorCircleSelect() {
         if (colorCircleSelection && !delCircleButton) {
-            paintFiguresKnot[circleNumber] = (<circle key={circleNumber} onClick={circleSelection} cx={coordinateToArray[circleNumber].x} cy={coordinateToArray[circleNumber].y} style={{ zIndex: 1 }} r="20" fill="green" stroke="yellow" />)
+            paintFiguresKnot[circleNumber] = (<circle key={circleNumber} onClick={circleSelection} cx={coordinateToArray[circleNumber].x} cy={coordinateToArray[circleNumber].y} style={{ zIndex: 1 }} r="10" fill="green" stroke="yellow" />)
         }
     }
     changeColorCircleSelect()
@@ -350,7 +350,7 @@ function Map(props: IMap) {
     console.log("finish")
 
     return (
-        <div id="map" className='polygonFields'
+        <div id="map"
         
             ref={(node) => {
                 
@@ -374,7 +374,7 @@ function Map(props: IMap) {
                 {paintFiguresKnot}
                 {/* <circle id="circle" onMouseDown={trackingCoordinatesDown} cx={newCoordinate.x} cy={newCoordinate.y} style={{zIndex:1000}} r="20" fill="black" stroke="black" /> */}
                 {coordinateLine}
-                <polygon points={coordinatePolygon} onMouseDown={downPolygon} stroke={colorСircuit} fill={colorFillPolygon} strokeWidth="0" />
+                <polygon points={coordinatePolygon} onMouseDown={downPolygon} stroke={colorСircuit} fill={colorFillPolygon} strokeWidth="0" fill-opacity=".5"/>
                 {/* <path id="line" d={coordinateLinePath} fill={colorFillPolygon} stroke={colorСircuit} /> */}
             </svg>
 
