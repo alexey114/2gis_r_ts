@@ -34,7 +34,7 @@ function Map(props: IMap) {
 
     // let textButtonCloseLinePath = "Соединить точки"                          //Текст кнопки закрытия линии Path
 
-    let [windowSize, setWindowSize] = useState<number[]>([500, 500])           //Отслеживание размера окна браузера
+    // let [windowSize, setWindowSize] = useState<number[]>([500, 500])           //Отслеживание размера окна браузера
     let [coordinateToArray, setCoordinateArray] = useState<ICoordinate[]>([])  //ОСНОВНОЙ массив координат
 
     // let [buttonCloseLinePath, setButtonCloseLinePath] = useState(false)      //соединение PATH линий
@@ -57,16 +57,16 @@ function Map(props: IMap) {
 
     //ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЯ РАЗМЕРА ОКНА БРАУЗЕРА ДЛЯ ПОСЛЕДУЮЩЕЙ АДАПТАЦИИ SVG ПОЛЯ ПОД НЕГО
 
-    useEffect(() => {
-        function changeWindow() {
-            setWindowSize([window.innerWidth - 50, window.innerHeight - 150])
-            console.log("window", window.innerWidth, window.innerHeight)
-        }
-        window.addEventListener("resize", changeWindow);
-        changeWindow()
-        return () => window.removeEventListener("resize", changeWindow);
+    // useEffect(() => {
+    //     function changeWindow() {
+    //         setWindowSize([window.innerWidth - 50, window.innerHeight - 150])
+    //         console.log("window", window.innerWidth, window.innerHeight)
+    //     }
+    //     window.addEventListener("resize", changeWindow);
+    //     changeWindow()
+    //     return () => window.removeEventListener("resize", changeWindow);
 
-    }, [])
+    // }, [])
 
     //ЗАПИСЬ КООРДИНАТ В МАССИВ
 
@@ -350,8 +350,10 @@ function Map(props: IMap) {
     console.log("finish")
 
     return (
-        <div id="map" className='polygonFields' style={{ width: windowSize[0], height: windowSize[1] }}
+        <div id="map" className='polygonFields'
+        
             ref={(node) => {
+                
                 if (node) {
                     if (!map) {
                         map = DG.map(node, {
@@ -366,8 +368,9 @@ function Map(props: IMap) {
                         }
                     })
                 }
-            }}>
-            <svg className='fieldsSVG' onMouseUp={trackingCoordinatesUp} onMouseMove={(e) => { trackingCoordinatesMove(circleNumber, e) }} onClick={setCoordinateToArray} width={windowSize[0]} height={windowSize[1]} xmlns="http://www.w3.org/2000/svg">
+            }}
+            >
+            <svg className='fieldsSVG' onMouseUp={trackingCoordinatesUp} onMouseMove={(e) => { trackingCoordinatesMove(circleNumber, e) }} onClick={setCoordinateToArray} xmlns="http://www.w3.org/2000/svg">
                 {paintFiguresKnot}
                 {/* <circle id="circle" onMouseDown={trackingCoordinatesDown} cx={newCoordinate.x} cy={newCoordinate.y} style={{zIndex:1000}} r="20" fill="black" stroke="black" /> */}
                 {coordinateLine}
