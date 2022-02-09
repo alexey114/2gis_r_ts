@@ -347,6 +347,10 @@ function Map(props: IMap) {
     //     : <rect key={index} x={element.x - 2} y={element.y - 2} width="5" height="5" fill={colorFillPolygon} stroke={colorСircuit} />
     // }
 
+    // function searchLng(e:any){
+    //     console.log(e.latlng.lat)
+    // }
+
     console.log("finish")
 
     return (
@@ -359,6 +363,10 @@ function Map(props: IMap) {
                         map = DG.map(node, {
                             'center': props.center,
                             'zoom': props.zoom,
+                        });
+
+                        map.on('click', function(e:any) {
+                            console.log(e.latlng.lat, e.latlng.lng)
                         });
                     }
 
