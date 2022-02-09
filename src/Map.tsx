@@ -21,7 +21,7 @@ interface ICoordinate {
 let map: any; // DG.map result
 
 function Map(props: IMap) {
-
+    let refCoordinate: any = [];
     let coordinateLine: JSX.Element[] = []                                   //Массив с координатами обычных линий для отрисовки
     let coordinatePolygon: string = ""                                         //Строка с координатами полигона
     // let coordinateLinePath: string = ""                                       //Строка с координатами линии Path
@@ -365,8 +365,10 @@ function Map(props: IMap) {
                             'zoom': props.zoom,
                         });
 
-                        map.on('click', function(e:any) {
+                        map.on('click', function(e:any) {                            
+                            refCoordinate.push(e.latlng.lat, e.latlng.lng)
                             console.log(e.latlng.lat, e.latlng.lng)
+                            console.log("refCoordinate", refCoordinate)
                         });
                     }
 
