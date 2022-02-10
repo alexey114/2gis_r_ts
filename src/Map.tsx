@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './Map.css';
-import Marker, { IMarker } from './Marker';
 
 const DG = require('2gis-maps');
 
@@ -26,27 +25,18 @@ let map: any; // DG.map result
 
 function Map(props: IMap) {
 
-    let refCoordinate:ICoordinateMap[] = []     //ОСНОВНОЙ массив координат КАРТЫ 
+
     let coordinateLine: JSX.Element[] = []                                   //Массив с координатами обычных линий для отрисовки
     let coordinatePolygon: string = ""                                         //Строка с координатами полигона
-    // let coordinateLinePath: string = ""                                       //Строка с координатами линии Path
 
     let colorСircuit = "black"                                                 //Цвет контуров
-    // let textButtonColor = "Красный выкл"                                      //Текст кнопки переключения цветов
 
     let colorFillPolygon = "none"                                              //Цвет заливки
     let textButtonFillPolygon = "Заливка полигона выкл"                        //Текст кнопки переключения заливки
 
-    // let textButtonCloseLinePath = "Соединить точки"                          //Текст кнопки закрытия линии Path
-
-    // let [windowSize, setWindowSize] = useState<number[]>([500, 500])           //Отслеживание размера окна браузера
     let [coordinateToArray, setCoordinateArray] = useState<ICoordinate[]>([])  //ОСНОВНОЙ массив координат
-    let [coordinateToArrayRef, setCoordinateArrayRef] = useState<ICoordinateMap[]>([])  //ОСНОВНОЙ массив координат
+    let [coordinateToArrayMap, setCoordinateToArrayMap] = useState<ICoordinateMap[]>([])  //ОСНОВНОЙ массив координат
 
-    // let [buttonCloseLinePath, setButtonCloseLinePath] = useState(false)      //соединение PATH линий
-    // let [selectFigure, setSelectFigure]  = useState('linePath')              //выбор по умолчанию для визуализации сложной линиия
-    // let [selectKnot, setSelectKnot] = useState('circle')                     //выбор по умолчанию, для визуализации в узлах кружков
-    // let [buttonColor, setButtonColor] = useState(false)                      //переключение цвета контуров
     let [buttonFillColor, setButtonFillColor] = useState(false)               //переключение цвета заливки
 
     let [isDown, setIsDown] = useState(false)                                 //отслеживание нажата ли кнопка на узле
@@ -60,19 +50,6 @@ function Map(props: IMap) {
     let [isDownLine, setIsDownLine] = useState(false)                       //Попадание на линию ипервое движение (добавление элемента)
     let [isDownLineOne, setIsDownLineOne] = useState(false)                 //Попадание на линию ипервое движение (замена элемента)
     let [isLineNumber, setLineNumber] = useState(-1);                       //Номер выбранной линии
-
-    //ОТСЛЕЖИВАНИЕ ИЗМЕНЕНИЯ РАЗМЕРА ОКНА БРАУЗЕРА ДЛЯ ПОСЛЕДУЮЩЕЙ АДАПТАЦИИ SVG ПОЛЯ ПОД НЕГО
-
-    // useEffect(() => {
-    //     function changeWindow() {
-    //         setWindowSize([window.innerWidth - 50, window.innerHeight - 150])
-    //         console.log("window", window.innerWidth, window.innerHeight)
-    //     }
-    //     window.addEventListener("resize", changeWindow);
-    //     changeWindow()
-    //     return () => window.removeEventListener("resize", changeWindow);
-
-    // }, [])
 
     //ЗАПИСЬ КООРДИНАТ В МАССИВ - оригинал
 
@@ -92,19 +69,17 @@ function Map(props: IMap) {
 
     //ЗАПИСЬ КООРДИНАТ В МАССИВ - map
 
-    function setCoordinateToArray(e: any) { //Ошибка типа при выборе MouseEvent - Свойство "getBoundingClientRect" не существует в типе "EventTarget".
-        let coordinate = [...refCoordinate]
-        console.log("coordinate - 1", coordinate)
-        console.log("refCoordinate - 2", refCoordinate)
+    // function setCoordinateToArray(e: any) { //Ошибка типа при выборе MouseEvent - Свойство "getBoundingClientRect" не существует в типе "EventTarget".
+    //     let coordinate = [...refCoordinate]
+    //     console.log("coordinate - 1", coordinate)
+    //     console.log("refCoordinate - 2", refCoordinate)
 
-        let coordinateRef = [...refCoordinate]
-        setCoordinateArrayRef(coordinateRef)
-        console.log("coordinateRef", coordinateRef)
+        // let coordinateRef = [...refCoordinate]
+        // setCoordinateArrayRef(coordinateRef)
+        // console.log("coordinateRef", coordinateRef)
 
-        createFigures()
-    }
-
-    
+    //     createFigures()
+    // }
 
     //РИСОВАНИЕ ПОЛИГОНОВ - оригинал
     // function createFigures() {
@@ -119,33 +94,12 @@ function Map(props: IMap) {
     // createFigures()
 
 
-    //РИСОВАНИЕ ПОЛИГОНОВ - map
-    function createFigures() {
-        coordinatePolygon += refCoordinate.map(createPolygon).join(" ")
-
-        for (let index = 1; index < refCoordinate.length; index++) {
-            coordinateLine.push(
-                <line key={index} onMouseDown={(e) => { downLine(index, e) }} x1={refCoordinate[index - 1].lat} x2={refCoordinate[index].lat} y1={refCoordinate[index - 1].lng} y2={refCoordinate[index].lng} stroke={colorСircuit} fill={colorFillPolygon} strokeWidth="5" />
-            )
-        }
-    }
 
 
     //Polygon
     function createPolygon(element: ICoordinateMap) {
         return (element.lat + " " + element.lng)
     }
-
-    //ИЗМЕНЕНИЕ ЦВЕТА КОНТУРА
-    // function setColor() {
-    //   setButtonColor((buttonColor) ? false : true)
-
-    //   function changeColor() {
-    //     colorСircuit = (buttonColor) ? "red" : "black"
-    //     textButtonColor = (buttonColor) ? "Красный вкл" : "Красный выкл"
-    //   }
-    //   changeColor()
-    // }
 
     //ИЗМЕНЕНИЕ ЦВЕТА ЗАЛИВКИ
     function setColorFill() {
@@ -155,14 +109,6 @@ function Map(props: IMap) {
             alert("Нарисуйте минимум две линии")
         }
     }
-
-    //ИЗМЕНЕНИЕ ЦВЕТА КОНТУРОВ И ТЕКСТА КНОПКИ
-
-    // function changeColor() {
-    //   colorСircuit = (buttonColor) ? "red" : "black"
-    //   textButtonColor = (buttonColor) ? "Красный вкл" : "Красный выкл"
-    // }
-    // changeColor()
 
     //ИЗМЕНЕНИЕ ЦВЕТА ЗАЛИВКИ И ТЕКСТА КНОПКИ
 
@@ -313,79 +259,6 @@ function Map(props: IMap) {
         window.location.reload()
     }
 
-    //СОЕДИНЕНИЕ ЛИНИЙ
-    // function setCloseLinePath() {
-    //   setButtonCloseLinePath((buttonCloseLinePath) ? false : true)
-    // }
-
-    //ВЫБОР ФИГУРЫ ЧЕРЕЗ SELECT
-    // function handleChangeFigure(event: React.ChangeEvent<HTMLSelectElement>) {
-    //   setSelectFigure( event.target.value )
-    // }
-
-    //ВЫБОР УЗЛА ЧЕРЕЗ SELECT
-    // function handleChangeKnot(event: React.ChangeEvent<HTMLSelectElement>) {
-    //   setSelectKnot( event.target.value )
-    //   console.log(event.target.value)
-    // }
-
-    // function changeCloseLinePath(){
-    //   if(selectFigure === 'linePath'){
-    //     if (coordinateToArray.length > 2) {
-    //       textButtonCloseLinePath = (buttonCloseLinePath)?"Убрать соединение" : "Соединить точки"
-    //       }
-    //   }
-    // }
-    // changeCloseLinePath()
-
-    //Отрисовка линии path
-    // function createLinePath(element: ICoordinate, index: number) {
-    //   let pointM = "M"
-    //   let pointL = "L"
-    //   return ((index === 0) ? pointM : pointL) + (element.x + " " + element.y)
-    // }
-
-    //Отрисовка фигур по условиям
-    // function createFigures() {
-    //   if (selectFigure === 'line') {
-    //     for (let index = 1; index < coordinateToArray.length; index++) {
-    //       coordinateLine.push(
-    //         <line key={index} x1={coordinateToArray[index - 1].x} x2={coordinateToArray[index].x} y1={coordinateToArray[index - 1].y} y2={coordinateToArray[index].y} stroke={colorСircuit} fill={colorFillPolygon} strokeWidth="1" />
-    //       )
-    //       console.log("Line", coordinateLine)
-    //     }
-    //   } else {
-    //     (selectFigure === 'polygon')
-    //       ?
-    //       coordinatePolygon += coordinateToArray.map(createPolygon).join(" ")
-    //       :
-    //       coordinateLinePath += coordinateToArray.map(createLinePath).join(" ")
-    //     console.log(coordinateLinePath)
-    //     if (buttonCloseLinePath === true) {
-    //       if (coordinateToArray.length > 2) {
-    //         coordinateLinePath += " Z "
-    //         console.log(coordinateLinePath)
-    //       } else {
-    //         alert("нарисуйте минимум 2 линии")
-    //       }
-    //     }
-    //   }
-    // }
-
-    // createFigures()
-
-    //Рисование кружков или квадратов в узлах
-
-    // function createFiguresKnot(element: ICoordinate, index: number) {
-    //   return (selectKnot === 'circle')
-    //     ? <circle key={index} cx={element.x} cy={element.y} r="5" fill={colorFillPolygon} stroke={colorСircuit} />
-    //     : <rect key={index} x={element.x - 2} y={element.y - 2} width="5" height="5" fill={colorFillPolygon} stroke={colorСircuit} />
-    // }
-
-    // function searchLng(e:any){
-    //     console.log(e.latlng.lat)
-    // }
-
     console.log("finish")
 
     return (
@@ -400,28 +273,31 @@ function Map(props: IMap) {
                             'zoom': props.zoom,
                         });
 
+                        let coordinateMap: any = []
+                        let arrayElement = []
+                        let indexElement = coordinateMap.length;
+
                         map.on('click', function(e:any) {
-                            refCoordinate.push({lat: e.latlng.lat, lng: e.latlng.lng})
                             console.log(e.latlng.lat, e.latlng.lng)
-                            console.log("refCoordinate", refCoordinate)
+                            coordinateMap.push({lat: e.latlng.lat, lng: e.latlng.lng})
+
+                                DG.circle([coordinateMap[coordinateMap.length-1].lat, coordinateMap[coordinateMap.length-1].lng], 50, {color: 'red', fill: 'red'}).addTo(map);
+                                DG.polyline(coordinateMap, {color: 'blue'}).addTo(map);
+
+                            console.log("refCoordinateTest", coordinateMap)
+
+                            // function test(){
+
+                            // }
                         });
+
+                        // if(coordinateToArrayMap.length>0){
+                        // }
                     }
 
-                    (props as any).children.forEach((child: any) => {
-                        if (child.type === Marker) { // т.е. type для компонент - это ф-ия (класс)
-                            DG.marker((child.props as IMarker).coords).addTo(map);
-                        }
-                    })
                 }
             }}
             >
-            <svg className='fieldsSVG' onMouseUp={trackingCoordinatesUp} onMouseMove={(e) => { trackingCoordinatesMove(circleNumber, e) }} onClick={setCoordinateToArray} xmlns="http://www.w3.org/2000/svg">
-                {paintFiguresKnot}
-                {/* <circle id="circle" onMouseDown={trackingCoordinatesDown} cx={newCoordinate.x} cy={newCoordinate.y} style={{zIndex:1000}} r="20" fill="black" stroke="black" /> */}
-                {coordinateLine}
-                <polygon points={coordinatePolygon} onMouseDown={downPolygon} stroke={colorСircuit} fill={colorFillPolygon} strokeWidth="0" fill-opacity=".5"/>
-                {/* <path id="line" d={coordinateLinePath} fill={colorFillPolygon} stroke={colorСircuit} /> */}
-            </svg>
 
             <div className='buttonBox'>
                 {/* <label>
