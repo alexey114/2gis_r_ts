@@ -17,11 +17,16 @@ interface ICoordinate {
     x: number,
     y: number
 }
+interface ICoordinateMap {
+    lat: number,
+    lng: number
+}
 
 let map: any; // DG.map result
 
 function Map(props: IMap) {
-    let refCoordinate: any = [];
+
+    let refCoordinate:ICoordinateMap[] = []     //ОСНОВНОЙ массив координат КАРТЫ 
     let coordinateLine: JSX.Element[] = []                                   //Массив с координатами обычных линий для отрисовки
     let coordinatePolygon: string = ""                                         //Строка с координатами полигона
     // let coordinateLinePath: string = ""                                       //Строка с координатами линии Path
@@ -36,6 +41,7 @@ function Map(props: IMap) {
 
     // let [windowSize, setWindowSize] = useState<number[]>([500, 500])           //Отслеживание размера окна браузера
     let [coordinateToArray, setCoordinateArray] = useState<ICoordinate[]>([])  //ОСНОВНОЙ массив координат
+    let [coordinateToArrayRef, setCoordinateArrayRef] = useState<ICoordinateMap[]>([])  //ОСНОВНОЙ массив координат
 
     // let [buttonCloseLinePath, setButtonCloseLinePath] = useState(false)      //соединение PATH линий
     // let [selectFigure, setSelectFigure]  = useState('linePath')              //выбор по умолчанию для визуализации сложной линиия
@@ -68,37 +74,66 @@ function Map(props: IMap) {
 
     // }, [])
 
-    //ЗАПИСЬ КООРДИНАТ В МАССИВ
+    //ЗАПИСЬ КООРДИНАТ В МАССИВ - оригинал
+
+    // function setCoordinateToArray(e: any) { //Ошибка типа при выборе MouseEvent - Свойство "getBoundingClientRect" не существует в типе "EventTarget".
+
+    //     if (isDownPolygon === true || isDown === true) {
+    //         console.log("нажато")
+    //     } else {
+    //         let offset = e.target.getBoundingClientRect() //отслеживание положения поля
+    //         if (!isDownLine) {
+    //             let coordinate = [...coordinateToArray]
+    //             coordinate.push({ x: e.clientX - offset.left, y: e.clientY - offset.top })
+    //             setCoordinateArray(coordinate)
+    //         }
+    //     }
+    // }
+
+    //ЗАПИСЬ КООРДИНАТ В МАССИВ - map
 
     function setCoordinateToArray(e: any) { //Ошибка типа при выборе MouseEvent - Свойство "getBoundingClientRect" не существует в типе "EventTarget".
+        let coordinate = [...refCoordinate]
+        console.log("coordinate - 1", coordinate)
+        console.log("refCoordinate - 2", refCoordinate)
 
-        if (isDownPolygon === true || isDown === true) {
-            console.log("нажато")
-        } else {
-            let offset = e.target.getBoundingClientRect() //отслеживание положения поля
-            if (!isDownLine) {
-                let coordinate = [...coordinateToArray]
-                coordinate.push({ x: e.clientX - offset.left, y: e.clientY - offset.top })
-                setCoordinateArray(coordinate)
-            }
-        }
+        let coordinateRef = [...refCoordinate]
+        setCoordinateArrayRef(coordinateRef)
+        console.log("coordinateRef", coordinateRef)
+
+        createFigures()
     }
 
-    //РИСОВАНИЕ ПОЛИГОНОВ
-    function createFigures() {
-        coordinatePolygon += coordinateToArray.map(createPolygon).join(" ")
+    
 
-        for (let index = 1; index < coordinateToArray.length; index++) {
+    //РИСОВАНИЕ ПОЛИГОНОВ - оригинал
+    // function createFigures() {
+    //     coordinatePolygon += coordinateToArray.map(createPolygon).join(" ")
+
+    //     for (let index = 1; index < coordinateToArray.length; index++) {
+    //         coordinateLine.push(
+    //             <line key={index} onMouseDown={(e) => { downLine(index, e) }} x1={coordinateToArray[index - 1].x} x2={coordinateToArray[index].x} y1={coordinateToArray[index - 1].y} y2={coordinateToArray[index].y} stroke={colorСircuit} fill={colorFillPolygon} strokeWidth="5" />
+    //         )
+    //     }
+    // }
+    // createFigures()
+
+
+    //РИСОВАНИЕ ПОЛИГОНОВ - map
+    function createFigures() {
+        coordinatePolygon += refCoordinate.map(createPolygon).join(" ")
+
+        for (let index = 1; index < refCoordinate.length; index++) {
             coordinateLine.push(
-                <line key={index} onMouseDown={(e) => { downLine(index, e) }} x1={coordinateToArray[index - 1].x} x2={coordinateToArray[index].x} y1={coordinateToArray[index - 1].y} y2={coordinateToArray[index].y} stroke={colorСircuit} fill={colorFillPolygon} strokeWidth="5" />
+                <line key={index} onMouseDown={(e) => { downLine(index, e) }} x1={refCoordinate[index - 1].lat} x2={refCoordinate[index].lat} y1={refCoordinate[index - 1].lng} y2={refCoordinate[index].lng} stroke={colorСircuit} fill={colorFillPolygon} strokeWidth="5" />
             )
         }
     }
-    createFigures()
+
 
     //Polygon
-    function createPolygon(element: ICoordinate) {
-        return (element.x + " " + element.y)
+    function createPolygon(element: ICoordinateMap) {
+        return (element.lat + " " + element.lng)
     }
 
     //ИЗМЕНЕНИЕ ЦВЕТА КОНТУРА
@@ -365,8 +400,8 @@ function Map(props: IMap) {
                             'zoom': props.zoom,
                         });
 
-                        map.on('click', function(e:any) {                            
-                            refCoordinate.push(e.latlng.lat, e.latlng.lng)
+                        map.on('click', function(e:any) {
+                            refCoordinate.push({lat: e.latlng.lat, lng: e.latlng.lng})
                             console.log(e.latlng.lat, e.latlng.lng)
                             console.log("refCoordinate", refCoordinate)
                         });
