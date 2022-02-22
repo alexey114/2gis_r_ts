@@ -73,7 +73,7 @@ function Map(props: IMap) {
 
                                     map.on("mousemove", function (e: any) {
 
-                                        console.log("isDownLineMap", isDownLineMap) //отражает на входе false, хотя состояние меняю непосредственно перед входом
+                                        console.log("isDownLineMap", isDownLineMap) //отражает на входе false, хотя состояние меняю непосредственно перед входом на true
 
                                         if (coordinateMap.length > 1 && isDownLineMap) {
                                         console.log("mousemove", e.latlng.lat, e.latlng.lng)
